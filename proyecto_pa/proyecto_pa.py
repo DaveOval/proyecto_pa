@@ -5,7 +5,7 @@ import reflex as rx
 from rxconfig import config
 from proyecto_pa.pages.info import pagina_info
 from proyecto_pa.pages.login import pagina_login
-
+from proyecto_pa.pages.signup import pagina_signup
 
 class State(rx.State):
     """The app state."""
@@ -41,3 +41,4 @@ app = rx.App()
 app.add_page(index)
 app.add_page(pagina_info)
 app.add_page(pagina_login)
+app.add_page(pagina_signup)
