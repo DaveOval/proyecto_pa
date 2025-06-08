@@ -1,5 +1,8 @@
 import reflex as rx
 
+from ..models.usuarios import Usuarios
+from sqlmodel import select
+
 class EstadoSignup(rx.State):
     email: str = ""
     password: str = ""
@@ -23,6 +26,39 @@ class EstadoSignup(rx.State):
         print(f"Correo: {self.email}")
         print(f"Contraseña: {self.password}")
         print(f"Nombre: {self.nombre}")
+
+    def buscar_usuario(self):
+        
+        with rx.session() as sesion:
+
+            usuario_registrado = sesion.exec(
+                select(Usuarios).where(Usuarios.email == self.email)
+            ).first()
+
+        return usuario_registrado
+
+    @rx.event
+    def registrar_cuenta(self):
+
+        usuario_registrado = self.buscar_usuario()
+
+        if usuario_registrado:
+            print("Usuario registrado")
+            self.email = ''
+
+        else:
+            nuevo_usuario = Usuarios.crear_usuario(
+                self.nombre,
+                self.email,
+                self.password
+            )
+
+            with rx.session() as sesion:
+                sesion.add(nuevo_usuario)
+                sesion.commit()
+            return rx.redirect('/login')
+
+
 
 @rx.page(route="/signup", title="Registrarse")
 def pagina_signup() -> rx.Component:
@@ -50,7 +86,7 @@ def pagina_signup() -> rx.Component:
                 ),
                 rx.button(
                     'Crear cuenta',
-                    on_click=EstadoSignup.mostrar_info,
+                    on_click=EstadoSignup.registrar_cuenta,
                 )
             )
         )

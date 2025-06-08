@@ -1,4 +1,15 @@
 import reflex as rx
+from ..models.usuarios import Usuarios
+from sqlmodel import select
+import bcrypt
+
+from ..Auth import AuthState
+
+import datetime
+
+import jwt
+
+LLAVE_SECRETA = 'llave_secreta'
 
 class EstadoLogin(rx.State):
     # Creamos un atributo por cada dato que nos interesa capturar
@@ -29,6 +40,45 @@ class EstadoLogin(rx.State):
             self.email = ""
             self.password = ""
 
+    def buscar_usuario(self):
+        
+        with rx.session() as sesion:
+
+            usuario_registrado = sesion.exec(
+                select(Usuarios).where(Usuarios.email == self.email)
+            ).first()
+
+        return usuario_registrado
+
+    def verificar_password(self, password_db):
+
+        return bcrypt.checkpw(self.password.encode(), password_db.encode())
+    
+    @rx.event
+    def iniciar_sesion(self):
+        usuario = self.buscar_usuario()
+
+        if usuario and self.verificar_password(usuario.password):
+            print("Inicio de sesion exitoso")
+
+            datos_token = {
+                'user_id': usuario.id,
+                'user_name': usuario.nombre,
+                'exp': datetime.datetime.now() + datetime.timedelta(minutes=5)
+            }
+
+            # Creamos una credencial
+            token = jwt.encode(datos_token, LLAVE_SECRETA ,algorithm='HS256')
+
+            AuthState.auth_token = token
+
+            return rx.redirect("/")
+        else:
+            print("Error: Credenciales incorrectas")
+            self.email = ""
+
+
+
 
 @rx.page(route="/login", title="Iniciar sesión")
 def pagina_login() -> rx.Component:
@@ -50,7 +100,7 @@ def pagina_login() -> rx.Component:
                 ),
                 rx.button(
                     "Iniciar sesión",
-                    on_click=EstadoLogin.mostrar_info,
+                    on_click=EstadoLogin.iniciar_sesion,
                 ),
             )
         )
