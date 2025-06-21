@@ -3,6 +3,8 @@ import reflex as rx
 from ..models.usuarios import Usuarios
 from sqlmodel import select
 
+from ..Auth import AuthState
+
 class EstadoSignup(rx.State):
     email: str = ""
     password: str = ""
@@ -60,7 +62,7 @@ class EstadoSignup(rx.State):
 
 
 
-@rx.page(route="/signup", title="Registrarse")
+@rx.page(route="/signup", title="Registrarse", on_load=AuthState.verificar_usuario)
 def pagina_signup() -> rx.Component:
     return rx.container(
         rx.center(

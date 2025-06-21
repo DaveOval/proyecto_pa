@@ -2,11 +2,13 @@ import reflex as rx
 from ..Auth import AuthState
 
 
-@rx.page(route="/dashboard", title="Dashboard")
+@rx.page(route="/dashboard", title="Dashboard", on_load=AuthState.verificar_token)
 def paginaDashboard() -> rx.Component:
+
     return rx.container(
-        rx.center(
-            rx.heading('Bienvenido usuario', size='8'),
-            rx.text(AuthState.auth_token)
+        rx.cond(
+            AuthState.esta_cargando,
+            rx.text("Cargando..."),
+            rx.text("Bienvenido usuario"),
         )
     )

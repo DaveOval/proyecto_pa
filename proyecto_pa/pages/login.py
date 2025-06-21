@@ -80,7 +80,7 @@ class EstadoLogin(rx.State):
 
 
 
-@rx.page(route="/login", title="Iniciar sesión")
+@rx.page(route="/login", title="Iniciar sesión", on_load=AuthState.verificar_usuario)
 def pagina_login() -> rx.Component:
     return rx.container(
         rx.center(
