@@ -56,7 +56,9 @@ class EstadoLogin(rx.State):
     
     @rx.event
     def iniciar_sesion(self):
+        print("Iniciando sesion")
         usuario = self.buscar_usuario()
+        print(usuario)
 
         if usuario and self.verificar_password(usuario.password):
             print("Inicio de sesion exitoso")
@@ -64,19 +66,17 @@ class EstadoLogin(rx.State):
             datos_token = {
                 'user_id': usuario.id,
                 'user_name': usuario.nombre,
-                'exp': datetime.datetime.now() + datetime.timedelta(minutes=5)
+                'exp': datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(hours=1)
             }
 
             # Creamos una credencial
             token = jwt.encode(datos_token, LLAVE_SECRETA ,algorithm='HS256')
 
-            AuthState.auth_token = token
+            yield AuthState.guardar_token(token)
+            return rx.redirect("/dashboard")
 
-            return rx.redirect("/")
         else:
             print("Error: Credenciales incorrectas")
-            self.email = ""
-
 
 
 
