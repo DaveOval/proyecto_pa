@@ -3,10 +3,10 @@ import jwt
 
 import reflex as rx
 
-LLAVE_SECRETA = 'llave_secreta'
+from appconfig import LLAVE_SECRETA
 
 class AuthState(rx.State):
-    auth_token: str = rx.Cookie( name='Authtoken', secure=True )
+    auth_token: str = rx.Cookie( name='auth_token', secure=True )
     esta_cargando: bool = False
 
     @rx.event
@@ -51,5 +51,12 @@ class AuthState(rx.State):
             
             except jwt.PyJWTError:
                 print("El token no es valido")
-
+    
+    @rx.event
+    def cerrar_sesion(self):
+        print('Cerrando sesion...')
+        self.auth_token = ""
+        rx.remove_cookie("auth_token")
+        
+        return rx.redirect("/login")
 

@@ -4,17 +4,18 @@ from sqlmodel import select
 import bcrypt
 
 from ..Auth import AuthState
+from appconfig import LLAVE_SECRETA
 
 import datetime
 
 import jwt
 
-LLAVE_SECRETA = 'llave_secreta'
-
 class EstadoLogin(rx.State):
     # Creamos un atributo por cada dato que nos interesa capturar
     email: str = ""
     password: str = ""
+    cargando: bool = False
+    error: bool = False
 
     @rx.event
     def asignarCorreo(self, correo_ingresado: str):
@@ -56,9 +57,11 @@ class EstadoLogin(rx.State):
     
     @rx.event
     def iniciar_sesion(self):
-        print("Iniciando sesion")
+        self.cargando = True
+        self.error = False
+        yield
+        
         usuario = self.buscar_usuario()
-        print(usuario)
 
         if usuario and self.verificar_password(usuario.password):
             print("Inicio de sesion exitoso")
@@ -73,10 +76,15 @@ class EstadoLogin(rx.State):
             token = jwt.encode(datos_token, LLAVE_SECRETA ,algorithm='HS256')
 
             yield AuthState.guardar_token(token)
+            self.cargando = False
             return rx.redirect("/dashboard")
 
         else:
+            self.cargando = False
+            self.error = True
+            self.password = ""
             print("Error: Credenciales incorrectas")
+            yield
 
 
 
@@ -98,10 +106,28 @@ def pagina_login() -> rx.Component:
                     value=EstadoLogin.password,
                     on_change=EstadoLogin.asignarPassword
                 ),
-                rx.button(
-                    "Iniciar sesión",
-                    on_click=EstadoLogin.iniciar_sesion,
+                rx.cond(
+                    EstadoLogin.cargando,
+                    rx.button(
+                        rx.spinner(loading=True),
+                        "Iniciar sesión",
+                        disabled=True,
+                    ),
+                    rx.button(
+                        "Iniciar sesión",
+                        on_click=EstadoLogin.iniciar_sesion,
+                    ),
+                    
                 ),
-            )
+                rx.cond(
+                    EstadoLogin.error,
+                    rx.callout(
+                        'El usuario o la contraseña son incorrectos',
+                        icon='triangle',
+                        color_scheme='red',
+                        role='alert',
+                    )
+                )
+            ),
         )
     )
