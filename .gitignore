@@ -4,6 +4,7 @@ __pycache__/
 .web
 .states
 *.py[cod]
+**/__pycache__/
 
 # Python
 *.pyc
