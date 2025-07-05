@@ -69,6 +69,8 @@ class EstadoLogin(rx.State):
             datos_token = {
                 'user_id': usuario.id,
                 'user_name': usuario.nombre,
+                'user_email': usuario.email,
+                'user_role': usuario.role,
                 'exp': datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(hours=1)
             }
 

@@ -8,6 +8,10 @@ from proyecto_pa.pages.login import pagina_login
 from proyecto_pa.pages.signup import pagina_signup
 from proyecto_pa.pages.dashboard import paginaDashboard
 
+from proyecto_pa.models.usuarios import Usuarios
+from proyecto_pa.models.peliculas import Peliculas
+from proyecto_pa.models.reviews import Reviews
+
 class State(rx.State):
     """The app state."""
 

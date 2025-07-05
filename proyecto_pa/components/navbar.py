@@ -9,9 +9,15 @@ def navbar_dashboard() -> rx.Component:
 
         rx.hstack(
             rx.link("Inicio", href="/dashboard", padding_x="1rem", font_weight="500"),
-            rx.link("Agregar Post", href="/agregar-post", padding_x="1rem", font_weight="500"),
+            rx.cond(
+                AuthState.usuario_actual.get('role') == 'admin',
+                rx.link('Agregar pelicula', href='/agregar-pelicula', padding_x='1rem', font_weight='500'),
+                rx.text(""),
+            ),
+            
             spacing="2",
         ),
+        
 
         rx.spacer(),
 
