@@ -7,6 +7,7 @@ from proyecto_pa.pages.info import pagina_info
 from proyecto_pa.pages.login import pagina_login
 from proyecto_pa.pages.signup import pagina_signup
 from proyecto_pa.pages.dashboard import paginaDashboard
+from proyecto_pa.pages.add_movie import pagina_agregar_pelicula
 
 from proyecto_pa.models.usuarios import Usuarios
 from proyecto_pa.models.peliculas import Peliculas
@@ -34,7 +35,7 @@ def index() -> rx.Component:
                 href="https://reflex.dev/docs/getting-started/introduction/",
                 is_external=True,
             ),
-            spacing="5",
+            spacing="5", 
             justify="center",
             min_height="85vh",
         ),
@@ -48,3 +49,4 @@ app.add_page(pagina_info)
 app.add_page(pagina_login)
 app.add_page(pagina_signup)
 app.add_page(paginaDashboard)
+app.add_page(pagina_agregar_pelicula)
