@@ -12,7 +12,9 @@ class Usuarios(rx.Model, table=True):
     nombre: str
     email: str
     password: str
-
+    role: str = Field(default='user')
+    status: str = Field(default='active')
+    
     @classmethod
     def crear_usuario(cls,  nombre_usuario, correo_usuario, pass_usuario):
         # Encriptar la contraseña
