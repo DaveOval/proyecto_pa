@@ -92,42 +92,67 @@ class EstadoLogin(rx.State):
 def pagina_login() -> rx.Component:
     return rx.container(
         rx.center(
-            rx.vstack(
-                rx.heading("Iniciar sesión", size="8"),
-                rx.input(
-                    placeholder="Correo electrónico",
-                    type="email",
-                    value=EstadoLogin.email,
-                    on_change=EstadoLogin.asignarCorreo
-                ),
-                rx.input(
-                    placeholder="Contraseña",
-                    type="password",
-                    value=EstadoLogin.password,
-                    on_change=EstadoLogin.asignarPassword
-                ),
-                rx.cond(
-                    EstadoLogin.cargando,
-                    rx.button(
-                        rx.spinner(loading=True),
-                        "Iniciar sesión",
-                        disabled=True,
+            rx.box(    
+                rx.vstack(
+                    rx.heading("Iniciar sesión", size="8", margin_bottom="1rem"),
+                    
+                    rx.input(
+                        placeholder="Correo electrónico",
+                        type="email",
+                        value=EstadoLogin.email,
+                        on_change=EstadoLogin.asignarCorreo,
+                        width="100%"
                     ),
-                    rx.button(
-                        "Iniciar sesión",
-                        on_click=EstadoLogin.iniciar_sesion,
+                    rx.input(
+                        placeholder="Contraseña",
+                        type="password",
+                        value=EstadoLogin.password,
+                        on_change=EstadoLogin.asignarPassword,
+                        width="100%"
                     ),
                     
-                ),
-                rx.cond(
-                    EstadoLogin.error,
-                    rx.callout(
-                        'El usuario o la contraseña son incorrectos',
-                        icon='triangle',
-                        color_scheme='red',
-                        role='alert',
+                    rx.cond(
+                        EstadoLogin.error,
+                        rx.callout(
+                            'El usuario o la contraseña son incorrectos',
+                            icon='triangle',
+                            color_scheme='red',
+                            role='alert',
+                            width="100%",
+                        )
+                    ),
+                    
+                    rx.cond(
+                        EstadoLogin.cargando,
+                        rx.button(
+                            rx.hstack(
+                                rx.spinner(loading=True),
+                                rx.text("Iniciando..."),
+                            ),
+                            disabled=True,
+                            width="100%",
+                            color_scheme="blue",
+                        ),
+                        rx.button(
+                            "Iniciar sesión",
+                            on_click=EstadoLogin.iniciar_sesion,
+                            width="100%",
+                            color_scheme="blue",
+                        )
+                    ),
+                    
+                    rx.link(
+                        "Regístrate aquí",
+                        href="/signup",
+                        text_decoration="underline",
                     )
-                )
+                ),
+                padding="2rem",
+                width='100%',
+                max_width="400px",
+                box_shadow="ld",
+                border_radius="lg",
             ),
+            height="100vh",
         )
     )

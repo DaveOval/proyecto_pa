@@ -66,30 +66,50 @@ class EstadoSignup(rx.State):
 def pagina_signup() -> rx.Component:
     return rx.container(
         rx.center(
-            rx.vstack(
-                rx.heading("Registrarse"),
-                rx.input(
-                    placeholder='Nombre',
-                    type='text',
-                    value=EstadoSignup.nombre,
-                    on_change=EstadoSignup.asignarNombre,
+            rx.box(
+                rx.vstack(
+                    rx.heading("Registrarse", size="8", margin_bottom="1rem"),
+                    
+                    rx.input(
+                        placeholder='Nombre',
+                        type='text',
+                        value=EstadoSignup.nombre,
+                        on_change=EstadoSignup.asignarNombre,
+                        width='100%',
+                    ),
+                    rx.input(
+                        placeholder='Correo electrónico',
+                        type='email',
+                        value=EstadoSignup.email,
+                        on_change=EstadoSignup.asignarCorreo,
+                        width='100%',
+                    ),
+                    rx.input(
+                        placeholder='Contraseña',
+                        type='password',
+                        value=EstadoSignup.password,
+                        on_change=EstadoSignup.asignarPassword,
+                        width='100%',
+                    ),
+                    rx.button(
+                        'Crear cuenta',
+                        on_click=EstadoSignup.registrar_cuenta,
+                        width='100%',
+                        color_scheme='blue',
+                    ),
+                    
+                    rx.link(
+                        rx.text("Inicia sesión aquí"),
+                        href="/login",
+                        color_scheme="blue",
+                    ),
                 ),
-                rx.input(
-                    placeholder='Correo electrónico',
-                    type='email',
-                    value=EstadoSignup.email,
-                    on_change=EstadoSignup.asignarCorreo,
-                ),
-                rx.input(
-                    placeholder='Contraseña',
-                    type='password',
-                    value=EstadoSignup.password,
-                    on_change=EstadoSignup.asignarPassword,
-                ),
-                rx.button(
-                    'Crear cuenta',
-                    on_click=EstadoSignup.registrar_cuenta,
-                )
-            )
+                padding="2rem",
+                width="100%",
+                max_width="400px",
+                box_shadow="lg",
+                border_radius="lg",
+            ),
+            height="100vh",
         )
     )
