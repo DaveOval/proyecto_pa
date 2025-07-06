@@ -1,6 +1,6 @@
 import reflex as rx
 from ..components.navbar import navbar_dashboard
-from ..models.peliculas import Peliculas
+from ..models import Peliculas
 from ..Auth import AuthState
 
 class EstadoAgregarPelicula(AuthState):

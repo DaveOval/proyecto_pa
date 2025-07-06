@@ -8,10 +8,10 @@ from proyecto_pa.pages.login import pagina_login
 from proyecto_pa.pages.signup import pagina_signup
 from proyecto_pa.pages.dashboard import paginaDashboard
 from proyecto_pa.pages.add_movie import pagina_agregar_pelicula
+from proyecto_pa.pages.ver_pelicula import detalle_pelicula
 
-from proyecto_pa.models.usuarios import Usuarios
-from proyecto_pa.models.peliculas import Peliculas
-from proyecto_pa.models.reviews import Reviews
+# Import models from the models package to avoid circular dependencies
+from proyecto_pa.models import Usuarios, Peliculas, Reviews
 
 class State(rx.State):
     """The app state."""
@@ -50,3 +50,4 @@ app.add_page(pagina_login)
 app.add_page(pagina_signup)
 app.add_page(paginaDashboard)
 app.add_page(pagina_agregar_pelicula)
+app.add_page(detalle_pelicula)

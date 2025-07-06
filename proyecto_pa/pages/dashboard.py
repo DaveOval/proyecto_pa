@@ -2,7 +2,7 @@ import reflex as rx
 from ..Auth import AuthState
 from ..components.navbar import navbar_dashboard
 from sqlmodel import select
-from ..models.peliculas import Peliculas
+from ..models import Peliculas
 from typing import List
 
 class EstadoDashboard(rx.State):
@@ -42,7 +42,10 @@ def paginaDashboard() -> rx.Component:
                 rx.foreach(
                     EstadoDashboard.peliculas,
                     lambda pelicula: rx.box(
-                        rx.text(f"Título: {pelicula.titulo}"),
+                        rx.link(
+                            rx.text(f"Título: {pelicula.titulo}", color="blue", text_decoration="underline"),
+                            href=f"/pelicula/{pelicula.id}"
+                        ),
                         rx.text(f"Descripción: {pelicula.descripcion}"),
                         rx.text(f"Fecha de Lanzamiento: {pelicula.fecha_lanzamiento}"),
                         margin_bottom='1rem',

@@ -1,5 +1,5 @@
 import reflex as rx
-from ..models.usuarios import Usuarios
+from ..models import Usuarios
 from sqlmodel import select
 import bcrypt
 
