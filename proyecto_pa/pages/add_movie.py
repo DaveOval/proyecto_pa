@@ -41,7 +41,7 @@ class EstadoAgregarPelicula(rx.State):
                 titulo_pelicula=self.titulo_pelicula,
                 descripcion_pelicula=self.descripcion_pelicula,
                 fecha_lanzamiento=self.fecha_lanzamiento,
-                creador_por_id= AuthState.usuario_actual.get('id')
+                creador_por_id= 10
             )
             
             with rx.session() as sesion:
@@ -89,11 +89,8 @@ def pagina_agregar_pelicula() -> rx.Component:
                     rx.cond(
                         EstadoAgregarPelicula.cargando,
                         rx.button(
-                            rx.hstack(
-                                rx.spinner(loading=True),
-                                rx.text("Agregando..."),
-                            ),
-                            disabled=True,
+                            "Agregar Película",
+                            on_click=EstadoAgregarPelicula.agregar_pelicula,
                             width="100%",
                             color_scheme="blue",
                         ),
@@ -113,3 +110,14 @@ def pagina_agregar_pelicula() -> rx.Component:
             height="100vh",
         )
     )
+    
+    
+""" rx.button(
+                            rx.hstack(
+                                rx.spinner(loading=True),
+                                rx.text("Agregando..."),
+                            ),
+                            disabled=True,
+                            width="100%",
+                            color_scheme="blue",
+                        ), """
