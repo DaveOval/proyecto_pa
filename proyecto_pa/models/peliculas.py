@@ -28,3 +28,13 @@ class Peliculas(rx.Model, table=True):
         back_populates="pelicula",
         sa_relationship_kwargs={"cascade": "all, delete-orphan"}
     )
+    
+    
+    @classmethod
+    def crear_pelicula(cls, titulo_pelicula, descripcion_pelicula, fecha_lanzamiento, creador_por_id):
+        return cls(
+            titulo=titulo_pelicula,
+            descripcion=descripcion_pelicula,
+            fecha_lanzamiento=fecha_lanzamiento,
+            creador_por_id=creador_por_id
+        )

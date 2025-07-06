@@ -23,12 +23,6 @@ class EstadoSignup(rx.State):
     def asignarNombre(self, nombre_ingresado: str):
         self.nombre = nombre_ingresado
 
-    @rx.event
-    def mostrar_info(self):
-        print(f"Correo: {self.email}")
-        print(f"Contraseña: {self.password}")
-        print(f"Nombre: {self.nombre}")
-
     def buscar_usuario(self):
         
         with rx.session() as sesion:
