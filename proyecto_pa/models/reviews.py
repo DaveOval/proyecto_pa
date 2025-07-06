@@ -24,3 +24,13 @@ class Reviews(rx.Model, table=True):
     # Relación con la película que se está reseñando
     pelicula_id: int = Field(foreign_key='peliculas.id')
     pelicula: "Peliculas" = Relationship(back_populates='reviews')
+    
+    
+    @classmethod
+    def agregar_review(cls, comentario: str, calificacion: int, usuario_id: int, pelicula_id: int):
+        return cls(
+            comentario=comentario,
+            calificacion=calificacion,
+            usuario_id=usuario_id,
+            pelicula_id=pelicula_id
+        )

@@ -47,7 +47,7 @@ def paginaDashboard() -> rx.Component:
                         rx.link(
                             rx.text(f"Título: {pelicula.titulo}", color="blue", text_decoration="underline"),
                             href=f"/pelicula/{pelicula.id}",
-                            on_click=lambda: AppState.set_pelicula_detalles_id(pelicula.id),
+                            on_click=lambda: [AppState.set_pelicula_detalles_id(pelicula.id), AppState.set_user_id_state(AuthState.usuario_actual.get('id', 1))],
                         ),
                         rx.text(f"Descripción: {pelicula.descripcion}"),
                         rx.text(f"Fecha de Lanzamiento: {pelicula.fecha_lanzamiento}"),
