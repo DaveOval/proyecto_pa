@@ -1,9 +1,9 @@
-from reflex import Var
 import reflex as rx
 from ..models import Peliculas, Reviews
 from sqlmodel import select
 from ..components.navbar import navbar_dashboard
 from proyecto_pa.state.app_state import AppState
+from typing import List
 
 class EstadoDetallePelicula(rx.State):
     pelicula: Peliculas = Peliculas()
@@ -11,6 +11,7 @@ class EstadoDetallePelicula(rx.State):
     pelicula_id: int = 0
     usuario_id: int = 0
     error: str = ""
+    reviws: List[Reviews] = []
     
     async def cargar_pelicula(self):
         self.cargando = True
@@ -26,6 +27,14 @@ class EstadoDetallePelicula(rx.State):
                 self.pelicula = resultado.first() 
                 if not self.pelicula:
                     print(f"No se encontró la película con ID: {pelicula_id}")
+                    
+                reviws_resulado = sesion.exec(
+                    select(Reviews).where(Reviews.pelicula_id == pelicula_id)
+                )
+                if not reviws_resulado:
+                    print(f"No se encontraron reviews para la película con ID: {pelicula_id}")
+                self.reviws = reviws_resulado.all()
+                print(f"Reviews encontradas: {len(self.reviws)}")
                 
         except Exception as e:
             print(f"Error al cargar la película: {e}")
@@ -149,6 +158,27 @@ def detalle_pelicula() -> rx.Component:
                     padding='1rem',
                     margin_top='1rem',
                 ),
+                rx.vstack(
+                    rx.heading('Reseñas de la Película', size='5', align='center'),
+                    rx.cond(
+                        EstadoDetallePelicula.reviws,
+                        rx.foreach(
+                            EstadoDetallePelicula.reviws,
+                            lambda review: rx.box(
+                                rx.text(f"Usuario ID: {review.usuario_id}"),
+                                rx.text(f"Comentario: {review.comentario}"),
+                                rx.text(f"Calificación: {review.calificacion}"),
+                                margin_bottom='1rem',
+                                padding='1rem',
+                                border='1px solid #ccc',
+                                border_radius='8px',
+                                width='100%',
+                            )
+                        ),
+                        rx.text("No hay reseñas para esta película."),
+                    ),
+                    width='100%',
+                )
             )
         ),
     )
