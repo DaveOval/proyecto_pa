@@ -13,11 +13,6 @@ from proyecto_pa.pages.ver_pelicula import detalle_pelicula
 # Import models from the models package to avoid circular dependencies
 from proyecto_pa.models import Usuarios, Peliculas, Reviews
 
-class State(rx.State):
-    """The app state."""
-
-    ...
-
 
 def index() -> rx.Component:
     # Welcome Page (Index)

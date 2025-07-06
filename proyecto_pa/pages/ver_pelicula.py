@@ -3,20 +3,20 @@ import reflex as rx
 from ..models import Peliculas
 from sqlmodel import select
 from ..components.navbar import navbar_dashboard
+from proyecto_pa.state.app_state import AppState
 
 class EstadoDetallePelicula(rx.State):
     pelicula: Peliculas = Peliculas()
     cargando: bool = False
     pelicula_id: int = 0
-    
-    def cargar_pelicula(self, pelicula_id: int):
+
+    async def cargar_pelicula(self):
         self.cargando = True
-        self.pelicula_id = pelicula_id
-        print(f"Cargando película con ID: {pelicula_id}")
         
+        app_state = await self.get_state(AppState)
+        pelicula_id = app_state.pelicula_detalles_id
         
-        
-        """ try:
+        try:
             with rx.session() as sesion:
                 resultado = sesion.exec(select(Peliculas).where(Peliculas.id == pelicula_id))
                 self.pelicula = resultado.first()
@@ -27,13 +27,14 @@ class EstadoDetallePelicula(rx.State):
             print(f"Error al cargar la película: {e}")
             
         finally:
-            self.cargando = False """
+            self.cargando = False
             
 @rx.page(
     route="/pelicula/[id]",
     title="Detalle de Película",
+    on_load=[EstadoDetallePelicula.cargar_pelicula],
 )
-def detalle_pelicula(id: Var[int] = 100) -> rx.Component:
+def detalle_pelicula() -> rx.Component:
     return rx.container(
         navbar_dashboard(),
         rx.cond(
@@ -47,6 +48,6 @@ def detalle_pelicula(id: Var[int] = 100) -> rx.Component:
                 padding='1rem',
                 border='1px solid #ccc',
                 border_radius='8px'
-            )
-        )
+            ),
+        ),
     )

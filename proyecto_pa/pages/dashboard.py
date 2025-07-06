@@ -5,6 +5,8 @@ from sqlmodel import select
 from ..models import Peliculas
 from typing import List
 
+from proyecto_pa.state.app_state import AppState
+
 class EstadoDashboard(rx.State):
     peliculas: List[Peliculas] = []
     cargando: bool = False
@@ -44,7 +46,8 @@ def paginaDashboard() -> rx.Component:
                     lambda pelicula: rx.box(
                         rx.link(
                             rx.text(f"Título: {pelicula.titulo}", color="blue", text_decoration="underline"),
-                            href=f"/pelicula/{pelicula.id}"
+                            href=f"/pelicula/{pelicula.id}",
+                            on_click=lambda: AppState.set_pelicula_detalles_id(pelicula.id),
                         ),
                         rx.text(f"Descripción: {pelicula.descripcion}"),
                         rx.text(f"Fecha de Lanzamiento: {pelicula.fecha_lanzamiento}"),
