@@ -14,7 +14,9 @@ class EstadoDetallePelicula(rx.State):
         self.pelicula_id = pelicula_id
         print(f"Cargando película con ID: {pelicula_id}")
         
-        try:
+        
+        
+        """ try:
             with rx.session() as sesion:
                 resultado = sesion.exec(select(Peliculas).where(Peliculas.id == pelicula_id))
                 self.pelicula = resultado.first()
@@ -25,16 +27,13 @@ class EstadoDetallePelicula(rx.State):
             print(f"Error al cargar la película: {e}")
             
         finally:
-            self.cargando = False
+            self.cargando = False """
             
 @rx.page(
     route="/pelicula/[id]",
     title="Detalle de Película",
 )
 def detalle_pelicula(id: Var[int] = 100) -> rx.Component:
-    # Llamar al método de carga cuando el componente se monta
-    rx.use_effect(lambda: EstadoDetallePelicula.cargar_pelicula(id), [id])
-    
     return rx.container(
         navbar_dashboard(),
         rx.cond(
