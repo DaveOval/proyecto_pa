@@ -181,7 +181,7 @@ proyecto_pa/
 - `pelicula_id`: ID de la película reseñada
 - `creado_en`: Fecha de creación
 
-## 🔗 API y Rutas
+## API y Rutas
 
 ### Páginas Principales
 - `/`: Página de bienvenida
