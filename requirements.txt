@@ -1,2 +1,7 @@
 reflex
 python-dotenv
+bcrypt
+PyJWT
+sqlmodel
+alembic
+psycopg2-binary
